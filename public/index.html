@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ws = new WebSocket('ws://localhost:3000');
+            var messages = document.getElementById('messages');
+            var form = document.getElementById('form');
+            var input = document.getElementById('input');
+
+            form.onsubmit = function(event) {
+                event.preventDefault();
+                ws.send(input.value);
+                input.value = '';
+            };
+        });
+    </script>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <form id="form">
+        <input id="input" autocomplete="off"><button>Send</button>
+    </form>
+</body>
+</html>
