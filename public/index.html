@@ -9,19 +9,35 @@
             var messages = document.getElementById('messages');
             var form = document.getElementById('form');
             var input = document.getElementById('input');
+            var clearButton = document.getElementById('clear');
 
             form.onsubmit = function(event) {
                 event.preventDefault();
                 ws.send(input.value);
                 input.value = '';
             };
+
+            ws.onmessage = function(event) {
+                var li = document.createElement('li');
+                event.data.text().then(function(text) {
+                    li.textContent = text;
+                    messages.appendChild(li);
+                });
+            };
+
+            clearButton.onclick = function() {
+                while (messages.firstChild) {
+                    messages.removeChild(messages.firstChild);
+                }
+            };
         });
     </script>
 </head>
 <body>
-    <ul id="messages"></ul>
     <form id="form">
         <input id="input" autocomplete="off"><button>Send</button>
     </form>
+    <button id="clear">Clear Messages</button>
+    <ul id="messages"></ul>
 </body>
 </html>
