@@ -5,7 +5,12 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+
+// Specify the port and path for the WebSocket server
+const WEBSOCKET_PORT = 4000;
+const WEBSOCKET_PATH = '/ws';
+
+const wss = new WebSocket.Server({ server, path: WEBSOCKET_PATH });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -20,7 +25,6 @@ function broadcastMessage(data) {
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
-    
     console.log('received: %s', message);
     // Broadcast the message to all clients
     broadcastMessage(message);
@@ -30,6 +34,7 @@ wss.on('connection', function connection(ws) {
   ws.send('Welcome to the WebSocket server!');
 });
 
-server.listen(3000, function listening() {
+// Update the server to listen on the specified port
+server.listen(WEBSOCKET_PORT, '0.0.0.0', function listening() {
   console.log('Listening on %d', server.address().port);
 });
